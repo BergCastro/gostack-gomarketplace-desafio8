@@ -34,11 +34,9 @@ const CartProvider: React.FC = ({ children }) => {
         '@GoMarketPlace:products',
       );
 
-      if (!productsStore) {
-        return;
+      if (productsStore) {
+        setProducts(JSON.parse(productsStore));
       }
-
-      setProducts(JSON.parse(productsStore));
     }
 
     loadProducts();
@@ -47,44 +45,34 @@ const CartProvider: React.FC = ({ children }) => {
   const addToCart = useCallback(
     async product => {
       const productExists = products.find(prod => prod.id === product.id);
-      let newProducts = [];
-      if (productExists) {
-        newProducts = products.map(prod => {
-          if (product.id === prod.id) {
-            return {
-              ...prod,
-              quantity: prod.quantity + 1,
-            };
-          }
 
-          return prod;
-        });
+      if (productExists) {
+        setProducts(
+          products.map(prod =>
+            prod.id === product.id
+              ? { ...product, quantity: prod.quantity + 1 }
+              : prod,
+          ),
+        );
       } else {
-        newProducts = [...products, { ...product, quantity: 1 }];
+        setProducts([...products, { ...product, quantity: 1 }]);
       }
 
       await AsyncStorage.setItem(
         '@GoMarketPlace:products',
-        JSON.stringify(newProducts),
+        JSON.stringify(products),
       );
-
-      setProducts(newProducts);
     },
     [products],
   );
 
   const increment = useCallback(
     async id => {
-      const newProducts = products.map(prod => {
-        if (id === prod.id) {
-          return {
-            ...prod,
-            quantity: prod.quantity + 1,
-          };
-        }
-        return prod;
-      });
-
+      const newProducts = products.map(product =>
+        product.id === id
+          ? { ...product, quantity: product.quantity + 1 }
+          : product,
+      );
       setProducts(newProducts);
 
       await AsyncStorage.setItem(
@@ -97,23 +85,17 @@ const CartProvider: React.FC = ({ children }) => {
 
   const decrement = useCallback(
     async id => {
-      const newProducts = products.map(prod => {
-        if (id === prod.id) {
-          return {
-            ...prod,
-            quantity: prod.quantity - 1,
-          };
-        }
-        return prod;
-      });
+      const newProducts = products.map(product =>
+        product.id === id
+          ? { ...product, quantity: product.quantity - 1 }
+          : product,
+      );
+      setProducts(newProducts);
 
       await AsyncStorage.setItem(
         '@GoMarketPlace:products',
         JSON.stringify(newProducts),
       );
-
-      // setProducts([]);
-      setProducts(newProducts);
     },
     [products],
   );
