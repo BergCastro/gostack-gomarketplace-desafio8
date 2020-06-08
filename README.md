@@ -10,9 +10,9 @@
 
 <div align="center">
   <img alt="GoMarketPLace" src="./.github/layout.png" />
-  <br>
-</div>
 
+</div>
+<br>
 <p align="center">
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/BergCastro/gostack-gomarketplace-desafio8">
 
