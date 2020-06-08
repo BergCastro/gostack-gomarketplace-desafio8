@@ -10,6 +10,7 @@
 
 <div align="center">
   <img alt="GoMarketPLace" src="./.github/layout.png" />
+  <br>
 </div>
 
 <p align="center">
